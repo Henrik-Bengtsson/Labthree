@@ -37,12 +37,10 @@ public class Rectangle implements Shape{
         this.point = point;
     }
 
-    @Override
     public void setColor(Color color) {
         this.color = color;
     }
 
-    @Override
     public void setSize(int size) {
         this.size = size;
     }
