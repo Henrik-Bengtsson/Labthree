@@ -4,50 +4,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
-public class Rectangle implements Shape{
+public class Rectangle extends Shape{
 
-    final static String type = "rectangle";
-    Point point;
-    int size;
-    Color color;
-
-    public Rectangle(Point point, int size, Color color) {
-        this.point = point;
-        this.size = size;
-        this.color = color;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Point getPoint() {
-        return point;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
+    public Rectangle(Point point, Color color, int size) {
+        super.setPoint(point);
+        super.setColor(color);
+        super.setSize(size);
     }
 
     @Override
     public void draw(GraphicsContext context) {
-        context.setFill(color);
-        context.fillRect(point.getMousePosX(), point.getMousePosY(), getSize(), getSize());
+        context.setFill(getColor());
+        context.fillRect(getPoint().getMousePosX(), getPoint().getMousePosY(), getSize(), getSize());
     }
 }

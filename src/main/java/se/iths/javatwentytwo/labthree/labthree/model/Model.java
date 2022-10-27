@@ -18,4 +18,5 @@ public class Model {
     public void setPoint(double mousePointX, double mousePointY) {
         this.point = new Point(mousePointX, mousePointY);
     }
+
 }

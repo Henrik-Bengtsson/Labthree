@@ -27,6 +27,8 @@ public class ArtistController {
     @FXML
     public Button triangleButton;
     @FXML
+    public Button selectButton;
+    @FXML
     public ColorPicker colorPick;
     @FXML
     public Spinner sizeSpinner;
@@ -40,6 +42,7 @@ public class ArtistController {
         model.setPoint(mouseEvent.getX(), mouseEvent.getY());
         checkShapeButton();
         drawShape(context);
+        model.shapeList.forEach(System.out::println);
     }
 
     private void drawShape(GraphicsContext context) {
@@ -58,14 +61,14 @@ public class ArtistController {
     }
 
     private Rectangle createRectangle(){
-        return new Rectangle(model.getPoint(), (Integer) sizeSpinner.getValue(), colorPick.getValue());
+        return new Rectangle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
     }
 
     private Circle createCircle(){
-        return new Circle(model.getPoint(), (Integer) sizeSpinner.getValue(), colorPick.getValue());
+        return new Circle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
     }
 
     private Triangle createTriangle(){
-        return new Triangle(model.getPoint(), (Integer) sizeSpinner.getValue(), colorPick.getValue());
+        return new Triangle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
     }
 }

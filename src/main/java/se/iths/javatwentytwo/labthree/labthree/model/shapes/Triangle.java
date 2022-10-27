@@ -4,47 +4,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
-public class Triangle implements Shape{
+public class Triangle extends Shape{
 
-    final static String type = "triangle";
-    Point point;
-    int size;
-    Color color;
-
-    public Triangle(Point point, int size, Color color) {
-        this.point = point;
-        this.size = size;
-        this.color = color;
-    }
-
-    public Point getPoint() {
-        return point;
-    }
-
-    public void setPoint(Point point) {
-        this.point = point;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
+    public Triangle(Point point, Color color, int size) {
+        super.setPoint(point);
+        super.setColor(color);
+        super.setSize(size);
     }
 
     @Override
     public void draw(GraphicsContext context) {
-        context.setFill(color);
-        context.fillPolygon(new double[]{point.getMousePosX(), point.getMousePosX(), point.getMousePosX() + getSize()},
-                new double[]{point.getMousePosY(), point.getMousePosY() + getSize(), point.getMousePosY() + getSize()}, 3);
+        context.setFill(getColor());
+        context.fillPolygon(new double[]{getPoint().getMousePosX(), getPoint().getMousePosX(), getPoint().getMousePosX() + getSize()},
+                new double[]{getPoint().getMousePosY(), getPoint().getMousePosY() + getSize(), getPoint().getMousePosY() + getSize()}, 3);
     }
 }
