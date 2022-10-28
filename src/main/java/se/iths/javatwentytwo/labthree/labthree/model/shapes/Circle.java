@@ -15,6 +15,11 @@ public class Circle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillOval(getPoint().getMousePosX(), getPoint().getMousePosY(), getSize(), getSize());
+        context.fillOval(getPoint().getPosX(), getPoint().getPosY(), getSize(), getSize());
+    }
+
+    @Override
+    public boolean pointInsideShape(Point point) {
+        return false;
     }
 }

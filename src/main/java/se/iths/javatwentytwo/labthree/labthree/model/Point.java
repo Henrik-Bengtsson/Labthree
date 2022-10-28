@@ -2,27 +2,27 @@ package se.iths.javatwentytwo.labthree.labthree.model;
 
 public class Point {
 
-    private double mousePosX;
-    private double mousePosY;
+    private double posX;
+    private double posY;
 
-    public Point(double mousePosX, double mousePosY) {
-        this.mousePosX = mousePosX;
-        this.mousePosY = mousePosY;
+    public Point(double posX, double posY) {
+        this.posX = posX;
+        this.posY = posY;
     }
 
-    public double getMousePosX() {
-        return mousePosX;
+    public double getPosX() {
+        return posX;
     }
 
-    public void setMousePosX(double mousePosX) {
-        this.mousePosX = mousePosX;
+    public void setPosX(double posX) {
+        this.posX = posX;
     }
 
-    public double getMousePosY() {
-        return mousePosY;
+    public double getPosY() {
+        return posY;
     }
 
-    public void setMousePosY(double mousePosY) {
-        this.mousePosY = mousePosY;
+    public void setPosY(double posY) {
+        this.posY = posY;
     }
 }

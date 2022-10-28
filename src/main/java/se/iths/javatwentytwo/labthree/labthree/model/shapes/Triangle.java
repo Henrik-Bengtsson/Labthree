@@ -15,7 +15,12 @@ public class Triangle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillPolygon(new double[]{getPoint().getMousePosX(), getPoint().getMousePosX(), getPoint().getMousePosX() + getSize()},
-                new double[]{getPoint().getMousePosY(), getPoint().getMousePosY() + getSize(), getPoint().getMousePosY() + getSize()}, 3);
+        context.fillPolygon(new double[]{getPoint().getPosX() + getSize()/2f, getPoint().getPosX(), getPoint().getPosX() + getSize()},
+                new double[]{getPoint().getPosY(), getPoint().getPosY() + getSize(), getPoint().getPosY() + getSize()}, 3);
+    }
+
+    @Override
+    public boolean pointInsideShape(Point point) {
+        return false;
     }
 }

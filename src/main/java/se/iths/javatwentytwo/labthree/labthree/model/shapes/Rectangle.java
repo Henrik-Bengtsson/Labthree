@@ -15,6 +15,13 @@ public class Rectangle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillRect(getPoint().getMousePosX(), getPoint().getMousePosY(), getSize(), getSize());
+        context.fillRect(getPoint().getPosX(), getPoint().getPosY(), getSize(), getSize());
+    }
+
+    @Override
+    public boolean pointInsideShape(Point point) {
+        boolean xInside = point.getPosX() >= this.getPoint().getPosX() && point.getPosX() <= this.getPoint().getPosX() + getSize();
+        boolean yInside = point.getPosY() >= this.getPoint().getPosY() && point.getPosY() <= this.getPoint().getPosY() + getSize();
+        return xInside && yInside;
     }
 }

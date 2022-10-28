@@ -8,9 +8,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.input.MouseEvent;
 import se.iths.javatwentytwo.labthree.labthree.model.Model;
-import se.iths.javatwentytwo.labthree.labthree.model.shapes.Circle;
-import se.iths.javatwentytwo.labthree.labthree.model.shapes.Rectangle;
-import se.iths.javatwentytwo.labthree.labthree.model.shapes.Triangle;
 
 public class ArtistController {
 
@@ -31,18 +28,20 @@ public class ArtistController {
     @FXML
     public ColorPicker colorPick;
     @FXML
-    public Spinner sizeSpinner;
+    public Spinner<Integer> sizeSpinner;
 
 
     public void initialize(){
         context = canvas.getGraphicsContext2D();
+
+        colorPick.valueProperty().bindBidirectional(model.colorPickProperty());
+        sizeSpinner.getValueFactory().valueProperty().bindBidirectional(model.sizeSpinnerProperty());
     }
 
     public void canvasClicked(MouseEvent mouseEvent) {
         model.setPoint(mouseEvent.getX(), mouseEvent.getY());
-        checkShapeButton();
+        checkActiveButton();
         drawShape(context);
-        model.shapeList.forEach(System.out::println);
     }
 
     private void drawShape(GraphicsContext context) {
@@ -51,24 +50,13 @@ public class ArtistController {
         }
     }
 
-    private void checkShapeButton(){
+    private void checkActiveButton(){
         if(rectangleButton.isFocused())
-            model.shapeList.add(createRectangle());
+            model.shapeList.add(model.createRectangle());
         else if(circleButton.isFocused())
-            model.shapeList.add(createCircle());
+            model.shapeList.add(model.createCircle());
         else if(triangleButton.isFocused())
-            model.shapeList.add(createTriangle());
+            model.shapeList.add(model.createTriangle());
     }
 
-    private Rectangle createRectangle(){
-        return new Rectangle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
-    }
-
-    private Circle createCircle(){
-        return new Circle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
-    }
-
-    private Triangle createTriangle(){
-        return new Triangle(model.getPoint(), colorPick.getValue(), (Integer) sizeSpinner.getValue());
-    }
 }

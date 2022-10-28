@@ -35,4 +35,6 @@ public abstract class Shape {
     }
 
     public abstract void draw(GraphicsContext context);
+
+    public abstract boolean pointInsideShape(Point point);
 }
