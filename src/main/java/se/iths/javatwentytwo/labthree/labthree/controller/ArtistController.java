@@ -3,9 +3,9 @@ package se.iths.javatwentytwo.labthree.labthree.controller;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import se.iths.javatwentytwo.labthree.labthree.model.Model;
 
@@ -18,15 +18,15 @@ public class ArtistController {
     @FXML
     public Canvas canvas;
     @FXML
-    public Button rectangleButton;
+    public ToggleButton rectangleButton;
     @FXML
-    public Button circleButton;
+    public ToggleButton circleButton;
     @FXML
-    public Button triangleButton;
+    public ToggleButton triangleButton;
     @FXML
-    public Button selectButton;
+    public ToggleButton selectButton;
     @FXML
-    public ColorPicker colorPick;
+    public ColorPicker colorPicker;
     @FXML
     public Spinner<Integer> sizeSpinner;
 
@@ -34,13 +34,17 @@ public class ArtistController {
     public void initialize(){
         context = canvas.getGraphicsContext2D();
 
-        colorPick.valueProperty().bindBidirectional(model.colorPickProperty());
+        colorPicker.valueProperty().bindBidirectional(model.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(model.sizeSpinnerProperty());
+        rectangleButton.selectedProperty().bindBidirectional(model.rectangleButtonProperty());
+        circleButton.selectedProperty().bindBidirectional(model.circleButtonProperty());
+        triangleButton.selectedProperty().bindBidirectional(model.triangleButtonProperty());
     }
 
     public void canvasClicked(MouseEvent mouseEvent) {
         model.setPoint(mouseEvent.getX(), mouseEvent.getY());
-        checkActiveButton();
+        model.createShape();
+        //checkActiveButton();
         drawShape(context);
     }
 
