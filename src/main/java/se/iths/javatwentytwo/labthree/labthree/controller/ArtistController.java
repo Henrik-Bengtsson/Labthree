@@ -39,28 +39,18 @@ public class ArtistController {
         rectangleButton.selectedProperty().bindBidirectional(model.rectangleButtonProperty());
         circleButton.selectedProperty().bindBidirectional(model.circleButtonProperty());
         triangleButton.selectedProperty().bindBidirectional(model.triangleButtonProperty());
+        selectButton.selectedProperty().bindBidirectional(model.selectButtonProperty());
     }
 
     public void canvasClicked(MouseEvent mouseEvent) {
         model.setPoint(mouseEvent.getX(), mouseEvent.getY());
         model.createShape();
-        //checkActiveButton();
         drawShape(context);
     }
 
     private void drawShape(GraphicsContext context) {
-        for (var shape: model.shapeList) {
+        for (var shape: model.getObservableList()) {
             shape.draw(context);
         }
     }
-
-    private void checkActiveButton(){
-        if(rectangleButton.isFocused())
-            model.shapeList.add(model.createRectangle());
-        else if(circleButton.isFocused())
-            model.shapeList.add(model.createCircle());
-        else if(triangleButton.isFocused())
-            model.shapeList.add(model.createTriangle());
-    }
-
 }

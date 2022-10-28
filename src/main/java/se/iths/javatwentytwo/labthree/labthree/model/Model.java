@@ -12,21 +12,25 @@ import se.iths.javatwentytwo.labthree.labthree.model.shapes.Rectangle;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Triangle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Model {
 
     private Point point;
-    public List<Shape> shapeList = new ArrayList<>();
 
-    ObservableList<Shape> observableList = FXCollections.observableArrayList(shapeList);
+    ObservableList<Shape> observableList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
     BooleanProperty rectangleButton = new SimpleBooleanProperty();
     BooleanProperty circleButton = new SimpleBooleanProperty();
     BooleanProperty triangleButton = new SimpleBooleanProperty();
+    BooleanProperty selectButton = new SimpleBooleanProperty();
 
+    public ObservableList<Shape> getObservableList() {
+        return observableList;
+    }
+
+    public BooleanProperty selectButtonProperty() {
+        return selectButton;
+    }
 
     public BooleanProperty triangleButtonProperty() {
         return triangleButton;
@@ -58,11 +62,11 @@ public class Model {
 
     public void createShape(){
         if(rectangleButton.getValue())
-            shapeList.add(createRectangle());
+            observableList.add(createRectangle());
         else if(circleButton.getValue())
-            shapeList.add(createCircle());
+            observableList.add(createCircle());
         else if(triangleButton.getValue())
-            shapeList.add(createTriangle());
+            observableList.add(createTriangle());
     }
 
     public Rectangle createRectangle(){
@@ -76,5 +80,4 @@ public class Model {
     public Triangle createTriangle(){
         return new Triangle(getPoint(), colorPicker.getValue(), sizeSpinner.getValue());
     }
-
 }
