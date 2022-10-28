@@ -15,8 +15,8 @@ public class Model {
     private Point point;
     public List<Shape> shapeList = new ArrayList<>();
 
-    public ObjectProperty<Color> colorPick = new SimpleObjectProperty<>(Color.RED);
-    public ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
+    ObjectProperty<Color> colorPick = new SimpleObjectProperty<>(Color.RED);
+    ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
     
     public ObjectProperty<Color> colorPickProperty() {
         return colorPick;
