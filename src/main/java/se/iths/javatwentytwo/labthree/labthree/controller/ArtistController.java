@@ -44,11 +44,12 @@ public class ArtistController {
 
     public void canvasClicked(MouseEvent mouseEvent) {
         model.setPoint(mouseEvent.getX(), mouseEvent.getY());
-        model.createShape();
+        model.buttonSelected();
         drawShape(context);
     }
 
     private void drawShape(GraphicsContext context) {
+        context.clearRect(0,0, canvas.getHeight(), canvas.getWidth());
         for (var shape: model.getObservableList()) {
             shape.draw(context);
         }

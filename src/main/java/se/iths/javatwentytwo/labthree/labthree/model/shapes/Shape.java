@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
+import java.util.Objects;
+
 public abstract class Shape {
 
     private Point point;
@@ -37,4 +39,25 @@ public abstract class Shape {
     public abstract void draw(GraphicsContext context);
 
     public abstract boolean pointInsideShape(Point point);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Shape shape)) return false;
+        return size == shape.size && Objects.equals(point, shape.point) && Objects.equals(color, shape.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(point, color, size);
+    }
+
+    @Override
+    public String toString() {
+        return "Shape{" +
+                "point=" + point +
+                ", color=" + color +
+                ", size=" + size +
+                '}';
+    }
 }

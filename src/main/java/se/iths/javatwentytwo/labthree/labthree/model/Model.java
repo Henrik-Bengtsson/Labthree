@@ -17,6 +17,7 @@ public class Model {
     private Point point;
 
     ObservableList<Shape> observableList = FXCollections.observableArrayList();
+
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
     BooleanProperty rectangleButton = new SimpleBooleanProperty();
@@ -60,13 +61,15 @@ public class Model {
         this.point = new Point(mousePointX, mousePointY);
     }
 
-    public void createShape(){
+    public void buttonSelected(){
         if(rectangleButton.getValue())
             observableList.add(createRectangle());
         else if(circleButton.getValue())
             observableList.add(createCircle());
         else if(triangleButton.getValue())
             observableList.add(createTriangle());
+        else if(selectButton.getValue())
+            selectShapeAndChange();
     }
 
     public Rectangle createRectangle(){
@@ -79,5 +82,17 @@ public class Model {
 
     public Triangle createTriangle(){
         return new Triangle(getPoint(), colorPicker.getValue(), sizeSpinner.getValue());
+    }
+
+    public void selectShapeAndChange(){
+        var shapeSelected = observableList.stream()
+                .filter(shape -> shape.pointInsideShape(point))
+                .findFirst().orElseThrow();
+        changeShape(shapeSelected);
+    }
+
+    public void changeShape(Shape shape){
+        shape.setColor(colorPicker.getValue());
+        shape.setSize(sizeSpinner.getValue());
     }
 }
