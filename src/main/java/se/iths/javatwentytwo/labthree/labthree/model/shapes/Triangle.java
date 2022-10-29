@@ -15,8 +15,8 @@ public class Triangle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillPolygon(new double[]{getPoint().getPosX() + getSize()/2f, getPoint().getPosX(), getPoint().getPosX() + getSize()},
-                new double[]{getPoint().getPosY(), getPoint().getPosY() + getSize(), getPoint().getPosY() + getSize()}, 3);
+        context.fillPolygon(new double[]{centerPoint().getPosX() + getSize()/2f, centerPoint().getPosX(), centerPoint().getPosX() + getSize()},
+                new double[]{centerPoint().getPosY(), centerPoint().getPosY() + getSize(), centerPoint().getPosY() + getSize()}, 3);
     }
 
     @Override
