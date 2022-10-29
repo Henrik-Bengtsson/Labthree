@@ -49,7 +49,7 @@ public class ArtistController {
     }
 
     private void drawShape(GraphicsContext context) {
-        context.clearRect(0,0, canvas.getHeight(), canvas.getWidth());
+        context.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
         for (var shape: model.getObservableList()) {
             shape.draw(context);
         }

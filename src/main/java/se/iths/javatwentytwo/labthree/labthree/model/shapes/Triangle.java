@@ -21,6 +21,8 @@ public class Triangle extends Shape{
 
     @Override
     public boolean pointInsideShape(Point point) {
-        return false;
+        boolean xInside = point.getPosX() >= centerPoint().getPosX() && point.getPosX() <= centerPoint().getPosX() + getSize();
+        boolean yInside = point.getPosY() >= centerPoint().getPosY() && point.getPosY() <= centerPoint().getPosY() + getSize();
+        return xInside && yInside;
     }
 }

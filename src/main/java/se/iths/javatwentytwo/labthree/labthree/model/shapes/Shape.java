@@ -36,6 +36,12 @@ public abstract class Shape {
         this.size = size;
     }
 
+    public Point centerPoint(){
+        var centerX = getPoint().getPosX() - getSize() / 2;
+        var centerY = getPoint().getPosY() - getSize() / 2;
+        return new Point(centerX, centerY);
+    }
+    
     public abstract void draw(GraphicsContext context);
 
     public abstract boolean pointInsideShape(Point point);
