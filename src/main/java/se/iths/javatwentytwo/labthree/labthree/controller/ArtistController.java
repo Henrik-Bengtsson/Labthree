@@ -3,6 +3,7 @@ package se.iths.javatwentytwo.labthree.labthree.controller;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.ToggleButton;
@@ -16,7 +17,11 @@ public class ArtistController {
     public GraphicsContext context;
 
     @FXML
-    public Canvas canvas;
+    public Button saveButton;
+    @FXML
+    public Button redoButton;
+    @FXML
+    public Button undoButton;
     @FXML
     public ToggleButton rectangleButton;
     @FXML
@@ -29,6 +34,8 @@ public class ArtistController {
     public ColorPicker colorPicker;
     @FXML
     public Spinner<Integer> sizeSpinner;
+    @FXML
+    public Canvas canvas;
 
 
     public void initialize(){
