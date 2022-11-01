@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -42,24 +43,24 @@
                </Menu>
            </MenuBar>
            <ToolBar prefHeight="40.0" prefWidth="200.0">
-               <Button fx:id="saveButton" mnemonicParsing="false" prefWidth="55.0">
+               <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClicked" prefWidth="55.0">
                    <graphic>
                        <ImageView fitHeight="20.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <Image url="@images/save.png"/>
+                           <Image url="@images/save.png" />
                        </ImageView>
                    </graphic>
                  </Button>
-               <Button fx:id="redoButton" mnemonicParsing="false" prefWidth="55.0">
+               <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redoButtonClicked" prefWidth="55.0">
                    <graphic>
                        <ImageView fitHeight="20.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <Image url="@images/redo.png"/>
+                           <Image url="@images/redo.png" />
                        </ImageView>
                    </graphic>
                </Button>
-               <Button fx:id="undoButton" mnemonicParsing="false" prefWidth="55.0">
+               <Button fx:id="undoButton" mnemonicParsing="false" onAction="#undoButtonClicked" prefWidth="55.0">
                    <graphic>
                        <ImageView fitHeight="20.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                           <Image url="@images/undo.png"/>
+                           <Image url="@images/undo.png" />
                        </ImageView>
                    </graphic>
                </Button>
@@ -104,15 +105,23 @@
        </VBox>
    </top>
    <right>
-       <VBox prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+       <VBox prefWidth="200.0" BorderPane.alignment="CENTER">
+           <HBox alignment="TOP_RIGHT">
+               <Label prefHeight="26.0" prefWidth="66.0" text="Label"/>
+               <Button mnemonicParsing="false" text="Connect"/>
+               <Button mnemonicParsing="false" text="Disconnect"/>
+           </HBox>
            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Chat" textAlignment="CENTER" underline="true">
               <font>
                   <Font name="System Bold Italic" size="22.0" />
               </font>
            </Label>
-           <ListView fx:id="outputChatText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS" />
+           <ListView fx:id="outputChatText">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin></ListView>
            <HBox>
-               <TextArea fx:id="textToChatField" prefHeight="39.0" prefWidth="135.0" />
+               <TextArea fx:id="textToChatField" prefHeight="30.0" prefWidth="135.0" />
                <Button fx:id="sendButtonTextField" mnemonicParsing="false" prefWidth="50.0" text="Send">
                    <font>
                        <Font size="14.0" />

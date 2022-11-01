@@ -3,16 +3,13 @@ package se.iths.javatwentytwo.labthree.labthree.controller;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import se.iths.javatwentytwo.labthree.labthree.model.Model;
+import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
 
 public class ArtistController {
 
-    public Model model = new Model();
+    public ArtistModel artistModel = new ArtistModel();
 
     public GraphicsContext context;
 
@@ -41,24 +38,37 @@ public class ArtistController {
     public void initialize(){
         context = canvas.getGraphicsContext2D();
 
-        colorPicker.valueProperty().bindBidirectional(model.colorPickerProperty());
-        sizeSpinner.getValueFactory().valueProperty().bindBidirectional(model.sizeSpinnerProperty());
-        rectangleButton.selectedProperty().bindBidirectional(model.rectangleButtonProperty());
-        circleButton.selectedProperty().bindBidirectional(model.circleButtonProperty());
-        triangleButton.selectedProperty().bindBidirectional(model.triangleButtonProperty());
-        selectButton.selectedProperty().bindBidirectional(model.selectButtonProperty());
+        colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
+        sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
+        rectangleButton.selectedProperty().bindBidirectional(artistModel.rectangleButtonProperty());
+        circleButton.selectedProperty().bindBidirectional(artistModel.circleButtonProperty());
+        triangleButton.selectedProperty().bindBidirectional(artistModel.triangleButtonProperty());
+        selectButton.selectedProperty().bindBidirectional(artistModel.selectButtonProperty());
     }
 
     public void canvasClicked(MouseEvent mouseEvent) {
-        model.setPoint(mouseEvent.getX(), mouseEvent.getY());
-        model.buttonSelected();
+        artistModel.setPoint(mouseEvent.getX(), mouseEvent.getY());
+        artistModel.buttonSelected();
         drawShape(context);
     }
 
     private void drawShape(GraphicsContext context) {
         context.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
-        for (var shape: model.getObservableList()) {
+        for (var shape: artistModel.getShapeList()) {
             shape.draw(context);
         }
+    }
+
+    public void undoButtonClicked() {
+        artistModel.undoLastEntry();
+        drawShape(context);
+    }
+
+    public void redoButtonClicked() {
+        artistModel.redoLastEntry();
+        drawShape(context);
+    }
+
+    public void saveButtonClicked() {
     }
 }

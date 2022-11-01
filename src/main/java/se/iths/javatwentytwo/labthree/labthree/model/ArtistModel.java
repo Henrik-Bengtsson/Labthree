@@ -4,19 +4,21 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Circle;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Rectangle;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Triangle;
 
-public class Model {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ArtistModel {
 
     private Point point;
 
-    ObservableList<Shape> observableList = FXCollections.observableArrayList();
+    List<Shape> shapeList = new ArrayList<>();
+    List<Shape> undoList = new ArrayList<>();
 
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
@@ -25,8 +27,8 @@ public class Model {
     BooleanProperty triangleButton = new SimpleBooleanProperty();
     BooleanProperty selectButton = new SimpleBooleanProperty();
 
-    public ObservableList<Shape> getObservableList() {
-        return observableList;
+    public List<Shape> getShapeList() {
+        return shapeList;
     }
 
     public BooleanProperty selectButtonProperty() {
@@ -63,11 +65,11 @@ public class Model {
 
     public void buttonSelected(){
         if(rectangleButton.getValue())
-            observableList.add(createRectangle());
+            shapeList.add(createRectangle());
         else if(circleButton.getValue())
-            observableList.add(createCircle());
+            shapeList.add(createCircle());
         else if(triangleButton.getValue())
-            observableList.add(createTriangle());
+            shapeList.add(createTriangle());
         else if(selectButton.getValue())
             selectShapeAndChange();
     }
@@ -85,14 +87,34 @@ public class Model {
     }
 
     public void selectShapeAndChange(){
-        var shapeSelected = observableList.stream()
+        var shapeSelected = shapeList.stream()
                 .filter(shape -> shape.pointInsideShape(point))
                 .findFirst().orElseThrow();
         changeShape(shapeSelected);
     }
 
     public void changeShape(Shape shape){
-        shape.setColor(colorPicker.getValue());
-        shape.setSize(sizeSpinner.getValue());
+        if(shape.getClass() == Rectangle.class)
+            shapeList.add(new Rectangle(shape.getPoint(), colorPicker.getValue(), sizeSpinner.getValue()));
+        else if(shape.getClass() == Circle.class)
+            shapeList.add(new Circle(shape.getPoint(), colorPicker.getValue(), sizeSpinner.getValue()));
+        else if (shape.getClass() == Triangle.class)
+            shapeList.add(new Triangle(shape.getPoint(), colorPicker.getValue(), sizeSpinner.getValue()));
+        undoList.add(shape);
+        shapeList.remove(shape);
+    }
+
+    public void undoLastEntry(){
+        if(!shapeList.isEmpty()) {
+            undoList.add(shapeList.get(shapeList.size() - 1));
+            shapeList.remove(shapeList.size() - 1);
+        }
+    }
+
+    public void redoLastEntry(){
+        if(!undoList.isEmpty()){
+            shapeList.add(undoList.get(undoList.size() - 1));
+            undoList.remove(undoList.size() - 1);
+        }
     }
 }
