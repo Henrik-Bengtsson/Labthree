@@ -24,4 +24,9 @@ public class Circle extends Shape{
         boolean yInside = point.getPosY() >= centerPoint().getPosY() && point.getPosY() <= centerPoint().getPosY() + getSize();
         return xInside && yInside;
     }
+
+    @Override
+    public Shape changeShape(Color color, int size) {
+        return new Circle(this.getPoint(), color, size);
+    }
 }

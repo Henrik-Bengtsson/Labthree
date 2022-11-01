@@ -6,6 +6,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
+import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
+import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
 public class ArtistController {
 
@@ -33,22 +35,26 @@ public class ArtistController {
     public Spinner<Integer> sizeSpinner;
     @FXML
     public Canvas canvas;
+    @FXML
+    public ToggleGroup buttonToggleGroup;
 
 
     public void initialize(){
         context = canvas.getGraphicsContext2D();
-
         colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
-        rectangleButton.selectedProperty().bindBidirectional(artistModel.rectangleButtonProperty());
-        circleButton.selectedProperty().bindBidirectional(artistModel.circleButtonProperty());
-        triangleButton.selectedProperty().bindBidirectional(artistModel.triangleButtonProperty());
-        selectButton.selectedProperty().bindBidirectional(artistModel.selectButtonProperty());
+        setToggleButtonToShapeType();
+    }
+
+    private void setToggleButtonToShapeType() {
+        rectangleButton.setUserData(ShapeType.RECT);
+        circleButton.setUserData(ShapeType.CIRCLE);
+        triangleButton.setUserData(ShapeType.TRIANGLE);
     }
 
     public void canvasClicked(MouseEvent mouseEvent) {
         artistModel.setPoint(mouseEvent.getX(), mouseEvent.getY());
-        artistModel.buttonSelected();
+        buttonSelected();
         drawShape(context);
     }
 
@@ -57,6 +63,13 @@ public class ArtistController {
         for (var shape: artistModel.getShapeList()) {
             shape.draw(context);
         }
+    }
+
+    public void buttonSelected(){
+        if(!selectButton.isSelected())
+            artistModel.getShapeList().add(Shape.createShape((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData(), artistModel.getPoint(), colorPicker.getValue(), sizeSpinner.getValue()));
+        else
+            artistModel.changeShape();
     }
 
     public void undoButtonClicked() {

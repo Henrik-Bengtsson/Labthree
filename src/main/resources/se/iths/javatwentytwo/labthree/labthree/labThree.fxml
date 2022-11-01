@@ -68,7 +68,7 @@
            <ToolBar prefHeight="44.0" prefWidth="822.0">
                <HBox spacing="5.0">
                    <fx:define>
-                       <ToggleGroup fx:id="buttonToggleGroup" />
+                       <ToggleGroup fx:id="buttonToggleGroup"/>
                    </fx:define>
                    <ToggleButton fx:id="rectangleButton" mnemonicParsing="false" prefWidth="55.0" toggleGroup="$buttonToggleGroup">
                        <graphic>
@@ -84,7 +84,7 @@
                            </ImageView>
                        </graphic>
                    </ToggleButton>
-                   <ToggleButton fx:id="triangleButton" mnemonicParsing="false" prefWidth="55.0" toggleGroup="$buttonToggleGroup">
+                   <ToggleButton fx:id="triangleButton" mnemonicParsing="false" prefWidth="55.0"  toggleGroup="$buttonToggleGroup">
                        <graphic>
                            <ImageView fitHeight="25.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                <Image url="@images/triangle.png" />
@@ -107,9 +107,9 @@
    <right>
        <VBox prefWidth="200.0" BorderPane.alignment="CENTER">
            <HBox alignment="TOP_RIGHT">
-               <Label prefHeight="26.0" prefWidth="66.0" text="Label"/>
-               <Button mnemonicParsing="false" text="Connect"/>
-               <Button mnemonicParsing="false" text="Disconnect"/>
+               <Label prefHeight="26.0" prefWidth="66.0" text="Label" />
+               <Button mnemonicParsing="false" text="Connect" />
+               <Button mnemonicParsing="false" text="Disconnect" />
            </HBox>
            <Label alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Chat" textAlignment="CENTER" underline="true">
               <font>

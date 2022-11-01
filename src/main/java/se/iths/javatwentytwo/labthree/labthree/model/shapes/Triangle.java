@@ -25,4 +25,9 @@ public class Triangle extends Shape{
         boolean yInside = point.getPosY() >= centerPoint().getPosY() && point.getPosY() <= centerPoint().getPosY() + getSize();
         return xInside && yInside;
     }
+
+    @Override
+    public Shape changeShape(Color color, int size) {
+        return new Triangle(this.getPoint(), color, size);
+    }
 }

@@ -12,6 +12,14 @@ public abstract class Shape {
     private Color color;
     private int size;
 
+    public static Shape createShape(ShapeType type, Point point, Color color, int size){
+        return switch (type) {
+            case RECT -> new Rectangle(point, color, size);
+            case CIRCLE -> new Circle(point, color, size);
+            case TRIANGLE -> new Triangle(point, color, size);
+        };
+    }
+
     public Point getPoint() {
         return point;
     }
@@ -46,6 +54,8 @@ public abstract class Shape {
 
     public abstract boolean pointInsideShape(Point point);
 
+    public abstract Shape changeShape(Color color, int size);
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,14 +66,5 @@ public abstract class Shape {
     @Override
     public int hashCode() {
         return Objects.hash(point, color, size);
-    }
-
-    @Override
-    public String toString() {
-        return "Shape{" +
-                "point=" + point +
-                ", color=" + color +
-                ", size=" + size +
-                '}';
     }
 }
