@@ -54,8 +54,6 @@ public abstract class Shape {
 
     public abstract boolean pointInsideShape(Point point);
 
-    public abstract Shape changeShape(Color color, int size);
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

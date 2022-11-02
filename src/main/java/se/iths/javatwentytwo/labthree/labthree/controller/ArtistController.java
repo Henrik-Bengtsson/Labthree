@@ -6,7 +6,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
-import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
 public class ArtistController {
@@ -66,14 +65,15 @@ public class ArtistController {
     }
 
     public void buttonSelected(){
-        if(!selectButton.isSelected())
-            artistModel.getShapeList().add(Shape.createShape((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData(), artistModel.getPoint(), colorPicker.getValue(), sizeSpinner.getValue()));
+        if(!selectButton.isSelected()) {
+            artistModel.addShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
+        }
         else
-            artistModel.changeShape();
+            artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
     }
 
     public void undoButtonClicked() {
-        artistModel.undoLastEntry();
+        artistModel.undoLastCommand();
         drawShape(context);
     }
 
