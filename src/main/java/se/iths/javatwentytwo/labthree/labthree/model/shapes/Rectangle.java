@@ -13,6 +13,12 @@ public class Rectangle extends Shape{
     }
 
     @Override
+    public String svgFormat() {
+        return "<rect x=\"" + centerPoint().getPosX() + "\" y=\"" + centerPoint().getPosY() + "\" width=\"" + getSize() +
+                "\" height=\"" + getSize() + "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
+    }
+
+    @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
         context.fillRect(centerPoint().getPosX(), centerPoint().getPosY(), getSize(), getSize());

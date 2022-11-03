@@ -13,6 +13,15 @@ public class Triangle extends Shape{
     }
 
     @Override
+    public String svgFormat() {
+        return "<polyline points=\"" + (centerPoint().getPosX() + getSize()/2f) + "," + centerPoint().getPosY() + " " +
+                centerPoint().getPosX() + "," + (centerPoint().getPosY() + getSize()) + " " +
+                (centerPoint().getPosX() + getSize()) + "," + (centerPoint().getPosY() + getSize()) +
+                "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
+
+    }
+
+    @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
         context.fillPolygon(new double[]{centerPoint().getPosX() + getSize()/2f, centerPoint().getPosX(), centerPoint().getPosX() + getSize()},

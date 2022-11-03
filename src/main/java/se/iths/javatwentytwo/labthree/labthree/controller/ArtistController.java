@@ -5,14 +5,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
+
+import java.io.File;
 
 public class ArtistController {
 
     public ArtistModel artistModel = new ArtistModel();
 
     public GraphicsContext context;
+    public Stage stage;
 
     @FXML
     public Button saveButton;
@@ -37,6 +42,9 @@ public class ArtistController {
     @FXML
     public ToggleGroup buttonToggleGroup;
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public void initialize(){
         context = canvas.getGraphicsContext2D();
@@ -83,5 +91,14 @@ public class ArtistController {
     }
 
     public void saveButtonClicked() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save location");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
+
+        File savePath = fileChooser.showSaveDialog(stage);
+        if(savePath != null)
+            artistModel.saveToFile(savePath.toPath());
     }
 }

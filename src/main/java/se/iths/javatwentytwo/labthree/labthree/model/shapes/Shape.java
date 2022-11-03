@@ -50,6 +50,8 @@ public abstract class Shape {
         return new Point(centerX, centerY);
     }
 
+    public abstract String svgFormat();
+
     public abstract void draw(GraphicsContext context);
 
     public abstract boolean pointInsideShape(Point point);

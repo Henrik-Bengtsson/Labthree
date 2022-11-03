@@ -13,6 +13,13 @@ public class Circle extends Shape{
     }
 
     @Override
+    public String svgFormat() {
+        return "<circle cx=\"" + centerPoint().getPosX() + "\" cy=\"" + centerPoint().getPosY() + "\" r=\"" + (getSize()/2) +
+                "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
+
+    }
+
+    @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
         context.fillOval(centerPoint().getPosX(), centerPoint().getPosY(), getSize(), getSize());
