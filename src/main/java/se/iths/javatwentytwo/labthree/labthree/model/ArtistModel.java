@@ -43,13 +43,13 @@ public class ArtistModel {
         this.point = new Point(mousePointX, mousePointY);
     }
 
-    public void addShapeToList(ShapeType shapeType) {
+    public void createShapeToList(ShapeType shapeType) {
         Shape shape = Shape.createShape(shapeType, point, colorPicker.getValue(), sizeSpinner.getValue());
         shapeList.add(shape);
-        undoRedoShapeCreated(shape);
+        undoRedoShapeCreateCommand(shape);
     }
 
-    private void undoRedoShapeCreated(Shape shape) {
+    private void undoRedoShapeCreateCommand(Shape shape) {
         CommandHandling commandHandling = new CommandHandling();
         commandHandling.undo = () -> shapeList.remove(shape);
         commandHandling.redo = () -> shapeList.add(shape);
@@ -69,10 +69,10 @@ public class ArtistModel {
         int oldSize = shape.getSize();
         shape.setColor(color);
         shape.setSize(size);
-        undoRedoShapeChanged(color, size, shape, oldColor, oldSize);
+        undoRedoShapeChangedCommand(color, size, shape, oldColor, oldSize);
     }
 
-    private static void undoRedoShapeChanged(Color color, int size, Shape shape, Color oldColor, int oldSize) {
+    private void undoRedoShapeChangedCommand(Color color, int size, Shape shape, Color oldColor, int oldSize) {
         CommandHandling commandHandling = new CommandHandling();
         commandHandling.undo = () -> {
             shape.setColor(oldColor);

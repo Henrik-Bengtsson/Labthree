@@ -76,7 +76,7 @@ public class ArtistController {
 
     public void buttonSelected(){
         if(!selectButton.isSelected()) {
-            artistModel.addShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
+            artistModel.createShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
         }
         else
             artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
