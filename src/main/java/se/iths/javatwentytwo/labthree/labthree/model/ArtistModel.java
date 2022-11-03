@@ -2,6 +2,8 @@ package se.iths.javatwentytwo.labthree.labthree.model;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
@@ -18,14 +20,14 @@ public class ArtistModel {
 
     private Point point;
 
-    List<Shape> shapeList = new ArrayList<>();
     static Deque<CommandHandling> undoList = new ArrayDeque<>();
     static Deque<CommandHandling> redoList = new ArrayDeque<>();
 
+    ObservableList<Shape> shapeList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
 
-    public List<Shape> getShapeList() {
+    public ObservableList<Shape> getShapeListProperty() {
         return shapeList;
     }
 

@@ -1,5 +1,6 @@
 package se.iths.javatwentytwo.labthree.labthree.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -50,6 +51,7 @@ public class ArtistController {
         context = canvas.getGraphicsContext2D();
         colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
+        saveButton.disableProperty().bind(Bindings.isEmpty(artistModel.getShapeListProperty()));
         setToggleButtonToShapeType();
     }
 
@@ -67,7 +69,7 @@ public class ArtistController {
 
     private void drawShape(GraphicsContext context) {
         context.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
-        for (var shape: artistModel.getShapeList()) {
+        for (var shape: artistModel.getShapeListProperty()) {
             shape.draw(context);
         }
     }
