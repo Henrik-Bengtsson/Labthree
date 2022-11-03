@@ -11,7 +11,7 @@ import java.net.Socket;
 
 public class ChatModel {
 
-    StringProperty message = new SimpleStringProperty();
+    StringProperty textMessage = new SimpleStringProperty();
     ObservableList<String> observableList = FXCollections.observableArrayList();
     private Socket socket;
     private final PrintWriter writer;
@@ -43,16 +43,16 @@ public class ChatModel {
         }
     }
 
-    public String getMessage() {
-        return message.get();
+    public String getTextMessage() {
+        return textMessage.get();
     }
 
-    public StringProperty messageProperty() {
-        return message;
+    public StringProperty textMessageProperty() {
+        return textMessage;
     }
 
-    public void setMessage(String message) {
-        this.message.set(message);
+    public void setTextMessage(String textMessage) {
+        this.textMessage.set(textMessage);
     }
 
     public ObservableList<String> getObservableList() {
@@ -64,7 +64,7 @@ public class ChatModel {
     }
 
     public void sendMessage(){
-        writer.println(getMessage());
-        setMessage("");
+        writer.println(getTextMessage());
+        setTextMessage("");
     }
 }

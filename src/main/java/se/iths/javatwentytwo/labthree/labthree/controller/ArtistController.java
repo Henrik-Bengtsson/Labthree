@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
+import se.iths.javatwentytwo.labthree.labthree.model.ChatModel;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.io.File;
 public class ArtistController {
 
     public ArtistModel artistModel = new ArtistModel();
+    public ChatModel chatModel = new ChatModel();
 
     public GraphicsContext context;
     public Stage stage;
@@ -43,6 +45,12 @@ public class ArtistController {
     @FXML
     public ToggleGroup buttonToggleGroup;
 
+    public ListView<String> messageChatList;
+
+    public TextField textMessageField;
+
+    public Button sendButtonTextField;
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
@@ -54,6 +62,9 @@ public class ArtistController {
         saveButton.disableProperty().bind(Bindings.isEmpty(artistModel.getShapeListProperty()));
         undoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getUndoListProperty()));
         redoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getRedoListProperty()));
+        textMessageField.textProperty().bindBidirectional(chatModel.textMessageProperty());
+        messageChatList.setItems(chatModel.getObservableList());
+        sendButtonTextField.disableProperty().bind(chatModel.textMessageProperty().isEmpty());
         setToggleButtonToShapeType();
     }
 
@@ -103,5 +114,9 @@ public class ArtistController {
         File savePath = fileChooser.showSaveDialog(stage);
         if(savePath != null)
             artistModel.saveToFile(savePath.toPath());
+    }
+
+    public void sendMessageClicked() {
+        chatModel.sendMessage();
     }
 }
