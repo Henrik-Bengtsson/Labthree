@@ -11,4 +11,6 @@ module se.iths.javatwentytwo.labthree.labthree {
     opens se.iths.javatwentytwo.labthree.labthree.model to javafx.fxml;
     exports se.iths.javatwentytwo.labthree.labthree.model.shapes;
     opens se.iths.javatwentytwo.labthree.labthree.model.shapes to javafx.fxml;
+    exports se.iths.javatwentytwo.labthree.labthree.model.command;
+    opens se.iths.javatwentytwo.labthree.labthree.model.command to javafx.fxml;
 }

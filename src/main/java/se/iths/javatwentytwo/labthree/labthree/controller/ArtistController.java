@@ -52,6 +52,8 @@ public class ArtistController {
         colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
         saveButton.disableProperty().bind(Bindings.isEmpty(artistModel.getShapeListProperty()));
+        undoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getUndoListProperty()));
+        redoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getRedoListProperty()));
         setToggleButtonToShapeType();
     }
 
@@ -75,9 +77,8 @@ public class ArtistController {
     }
 
     public void buttonSelected(){
-        if(!selectButton.isSelected()) {
+        if(!selectButton.isSelected())
             artistModel.createShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
-        }
         else
             artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
     }

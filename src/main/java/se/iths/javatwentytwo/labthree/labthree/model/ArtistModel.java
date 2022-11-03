@@ -5,27 +5,33 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
+import se.iths.javatwentytwo.labthree.labthree.model.command.CommandHandling;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 public class ArtistModel {
 
     private Point point;
 
-    static Deque<CommandHandling> undoList = new ArrayDeque<>();
-    static Deque<CommandHandling> redoList = new ArrayDeque<>();
-
+    ObservableList<CommandHandling> undoList = FXCollections.observableArrayList();
+    ObservableList<CommandHandling> redoList = FXCollections.observableArrayList();
     ObservableList<Shape> shapeList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
+
+    public ObservableList<CommandHandling> getUndoListProperty() {
+        return undoList;
+    }
+
+    public ObservableList<CommandHandling> getRedoListProperty() {
+        return redoList;
+    }
 
     public ObservableList<Shape> getShapeListProperty() {
         return shapeList;
@@ -53,7 +59,7 @@ public class ArtistModel {
         CommandHandling commandHandling = new CommandHandling();
         commandHandling.undo = () -> shapeList.remove(shape);
         commandHandling.redo = () -> shapeList.add(shape);
-        undoList.push(commandHandling);
+        undoList.add(commandHandling);
         redoList.clear();
     }
 
@@ -82,22 +88,22 @@ public class ArtistModel {
             shape.setColor(color);
             shape.setSize(size);
         };
-        undoList.push(commandHandling);
+        undoList.add(commandHandling);
         redoList.clear();
     }
 
     public void undoLastCommand() {
         if (!undoList.isEmpty()) {
-            CommandHandling undoToExecute = undoList.pop();
-            redoList.push(undoToExecute);
+            CommandHandling undoToExecute = undoList.remove(undoList.size() - 1);
+            redoList.add(undoToExecute);
             undoToExecute.undo.execute();
         }
     }
 
     public void redoLastCommand() {
         if (!redoList.isEmpty()) {
-            CommandHandling redoToExecute = redoList.pop();
-            undoList.push(redoToExecute);
+            CommandHandling redoToExecute = redoList.remove(redoList.size() - 1);
+            undoList.add(redoToExecute);
             redoToExecute.redo.execute();
         }
     }
@@ -121,14 +127,4 @@ public class ArtistModel {
         shapeList.forEach(shape -> svgList.add(shape.svgFormat()));
         svgList.add("</svg>");
     }
-}
-
-@FunctionalInterface
-interface Command {
-    void execute();
-}
-
-class CommandHandling {
-    public Command undo;
-    public Command redo;
 }
