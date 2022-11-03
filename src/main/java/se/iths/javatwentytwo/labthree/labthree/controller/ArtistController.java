@@ -78,7 +78,7 @@ public class ArtistController {
     }
 
     public void redoButtonClicked() {
-        artistModel.redoLastEntry();
+        artistModel.redoLastCommand();
         drawShape(context);
     }
 

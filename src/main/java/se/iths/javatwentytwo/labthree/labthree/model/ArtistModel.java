@@ -16,17 +16,14 @@ public class ArtistModel {
     private Point point;
 
     List<Shape> shapeList = new ArrayList<>();
-    static Deque<Command> undoList = new ArrayDeque<>();
+    static Deque<CommandHandling> undoList = new ArrayDeque<>();
+    static Deque<CommandHandling> redoList = new ArrayDeque<>();
 
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
 
     public List<Shape> getShapeList() {
         return shapeList;
-    }
-
-    public Deque<Command> getUndoList() {
-        return undoList;
     }
 
     public ObjectProperty<Color> colorPickerProperty() {
@@ -37,10 +34,6 @@ public class ArtistModel {
         return sizeSpinner;
     }
 
-    public Point getPoint() {
-        return point;
-    }
-
     public void setPoint(double mousePointX, double mousePointY) {
         this.point = new Point(mousePointX, mousePointY);
     }
@@ -48,8 +41,15 @@ public class ArtistModel {
     public void addShapeToList(ShapeType shapeType){
         Shape shape = Shape.createShape(shapeType, point, colorPicker.getValue(), sizeSpinner.getValue());
         shapeList.add(shape);
-        Command undo = ()-> shapeList.remove(shape);
-        undoList.push(undo);
+        undoRedoShapeCreated(shape);
+    }
+
+    private void undoRedoShapeCreated(Shape shape) {
+        CommandHandling commandHandling = new CommandHandling();
+        commandHandling.undo = ()-> shapeList.remove(shape);
+        commandHandling.redo = ()-> shapeList.add(shape);
+        undoList.push(commandHandling);
+        redoList.clear();
     }
 
     public Shape selectShape(){
@@ -64,20 +64,40 @@ public class ArtistModel {
         int oldSize = shape.getSize();
         shape.setColor(color);
         shape.setSize(size);
-        Command undo = () -> {shape.setColor(oldColor); shape.setSize(oldSize);};
-        undoList.push(undo);
+        undoRedoShapeChanged(color, size, shape, oldColor, oldSize);
+    }
+
+    private static void undoRedoShapeChanged(Color color, int size, Shape shape, Color oldColor, int oldSize) {
+        CommandHandling commandHandling = new CommandHandling();
+        commandHandling.undo = () -> {shape.setColor(oldColor); shape.setSize(oldSize);};
+        commandHandling.redo = () -> {shape.setColor(color); shape.setSize(size);};
+        undoList.push(commandHandling);
+        redoList.clear();
     }
 
     public void undoLastCommand(){
-        Command undoToExecute = undoList.pop();
-        undoToExecute.execute();
+        if(!undoList.isEmpty()) {
+            CommandHandling undoToExecute = undoList.pop();
+            redoList.push(undoToExecute);
+            undoToExecute.undo.execute();
+        }
     }
 
-    public void redoLastEntry(){
+    public void redoLastCommand(){
+        if(!redoList.isEmpty()) {
+            CommandHandling redoToExecute = redoList.pop();
+            undoList.push(redoToExecute);
+            redoToExecute.redo.execute();
+        }
     }
 }
 
 @FunctionalInterface
 interface Command{
     void execute();
+}
+
+class CommandHandling{
+    public Command undo;
+    public Command redo;
 }
