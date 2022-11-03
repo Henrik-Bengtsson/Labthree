@@ -14,30 +14,39 @@ public class ChatModel {
     StringProperty textMessage = new SimpleStringProperty();
     ObservableList<String> observableList = FXCollections.observableArrayList();
     private Socket socket;
-    private final PrintWriter writer;
-    private final BufferedReader reader;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
-    public ChatModel(){
+    public void chatHandling() {
+        Thread thread = new Thread(() -> {
+            try {
+                while (true) {
+                    String line = reader.readLine();
+                    Platform.runLater(() -> observableList.add(line));
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    public void connectServer() {
         try {
             socket = new Socket("localhost", 8000);
             OutputStream output = socket.getOutputStream();
             writer = new PrintWriter(output, true);
             InputStream input = socket.getInputStream();
             reader = new BufferedReader(new InputStreamReader(input));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            var thread = new Thread(() -> {
-                try {
-                    while (true) {
-                        String line = reader.readLine();
-                        Platform.runLater(()-> observableList.add(line));
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            thread.setDaemon(true);
-            thread.start();
-
+    public void disconnectServer() {
+        try {
+            socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +72,7 @@ public class ChatModel {
         this.observableList = observableList;
     }
 
-    public void sendMessage(){
+    public void sendMessage() {
         writer.println(getTextMessage());
         setTextMessage("");
     }
