@@ -6,7 +6,7 @@ import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
 public class Rectangle extends Shape{
 
-    public Rectangle(Point point, Color color, int size) {
+    public Rectangle(Point point, Color color, double size) {
         super.setPoint(point);
         super.setColor(color);
         super.setSize(size);
@@ -14,7 +14,7 @@ public class Rectangle extends Shape{
 
     @Override
     public String svgFormat() {
-        return "<rect x=\"" + centerPoint().getPosX() + "\" y=\"" + centerPoint().getPosY() + "\" width=\"" + getSize() +
+        return "<rect x=\"" + getPoint().getPosX() + "\" y=\"" + getPoint().getPosY() + "\" width=\"" + getSize() +
                 "\" height=\"" + getSize() + "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
     }
 

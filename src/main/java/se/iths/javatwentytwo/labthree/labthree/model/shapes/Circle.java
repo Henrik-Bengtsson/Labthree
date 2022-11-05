@@ -6,7 +6,7 @@ import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
 public class Circle extends Shape{
 
-    public Circle(Point point, Color color, int size) {
+    public Circle(Point point, Color color, double size) {
         super.setPoint(point);
         super.setColor(color);
         super.setSize(size);
@@ -14,7 +14,7 @@ public class Circle extends Shape{
 
     @Override
     public String svgFormat() {
-        return "<circle cx=\"" + centerPoint().getPosX() + "\" cy=\"" + centerPoint().getPosY() + "\" r=\"" + (getSize()/2) +
+        return "<circle cx=\"" + getPoint().getPosX() + "\" cy=\"" + getPoint().getPosY() + "\" r=\"" + (getSize()/2) +
                 "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
 
     }

@@ -6,7 +6,7 @@ import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
 public class Triangle extends Shape{
 
-    public Triangle(Point point, Color color, int size) {
+    public Triangle(Point point, Color color, double size) {
         super.setPoint(point);
         super.setColor(color);
         super.setSize(size);
@@ -14,9 +14,9 @@ public class Triangle extends Shape{
 
     @Override
     public String svgFormat() {
-        return "<polyline points=\"" + (centerPoint().getPosX() + getSize()/2f) + "," + centerPoint().getPosY() + " " +
-                centerPoint().getPosX() + "," + (centerPoint().getPosY() + getSize()) + " " +
-                (centerPoint().getPosX() + getSize()) + "," + (centerPoint().getPosY() + getSize()) +
+        return "<polyline points=\"" + (getPoint().getPosX() + getSize()/2f) + "," + getPoint().getPosY() + " " +
+                getPoint().getPosX() + "," + (getPoint().getPosY() + getSize()) + " " +
+                (getPoint().getPosX() + getSize()) + "," + (getPoint().getPosY() + getSize()) +
                 "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
 
     }

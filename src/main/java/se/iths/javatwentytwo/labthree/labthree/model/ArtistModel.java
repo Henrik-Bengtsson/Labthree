@@ -1,5 +1,6 @@
 package se.iths.javatwentytwo.labthree.labthree.model;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ArtistModel {
 
@@ -21,9 +23,13 @@ public class ArtistModel {
 
     ObservableList<CommandHandling> undoList = FXCollections.observableArrayList();
     ObservableList<CommandHandling> redoList = FXCollections.observableArrayList();
-    ObservableList<Shape> shapeList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
+    ObservableList<Shape> shapeList = FXCollections.observableArrayList(ArtistModel::observableArray);
+
+    private static Observable[] observableArray(Shape shape){
+        return new Observable[]{shape.colorProperty(), shape.sizeProperty(), shape.pointProperty()};
+    }
 
     public ObservableList<CommandHandling> getUndoListProperty() {
         return undoList;
@@ -33,7 +39,7 @@ public class ArtistModel {
         return redoList;
     }
 
-    public ObservableList<Shape> getShapeListProperty() {
+    public ObservableList <Shape> getShapeListProperty() {
         return shapeList;
     }
 
@@ -55,6 +61,25 @@ public class ArtistModel {
         undoRedoShapeCreateCommand(shape);
     }
 
+    public void addSvgToShapeList(String line){
+        Shape shape = fromSvgToShape(line);
+        shapeList.add(shape);
+        undoRedoShapeCreateCommand(shape);
+    }
+
+    public Shape fromSvgToShape(String line) {
+        Pattern pattern = Pattern.compile("[=,]");
+        String[] svgString = pattern.split(line);
+
+        if(line.contains("rect"))
+            return Shape.rectFromSvg(svgString);
+        else if(line.contains("circle"))
+            return Shape.circleFromSvg(svgString);
+        else if(line.contains("polyline"))
+            return Shape.triangleFromSvg(svgString);
+        return null;
+    }
+
     private void undoRedoShapeCreateCommand(Shape shape) {
         CommandHandling commandHandling = new CommandHandling();
         commandHandling.undo = () -> shapeList.remove(shape);
@@ -69,16 +94,16 @@ public class ArtistModel {
                 .findFirst().orElseThrow();
     }
 
-    public void changeShape(Color color, int size) {
+    public void changeShape(Color color, double size) {
         Shape shape = selectShape();
         Color oldColor = shape.getColor();
-        int oldSize = shape.getSize();
+        double oldSize = shape.getSize();
         shape.setColor(color);
         shape.setSize(size);
         undoRedoShapeChangedCommand(color, size, shape, oldColor, oldSize);
     }
 
-    private void undoRedoShapeChangedCommand(Color color, int size, Shape shape, Color oldColor, int oldSize) {
+    private void undoRedoShapeChangedCommand(Color color, double size, Shape shape, Color oldColor, double oldSize) {
         CommandHandling commandHandling = new CommandHandling();
         commandHandling.undo = () -> {
             shape.setColor(oldColor);

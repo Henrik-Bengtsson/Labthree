@@ -1,5 +1,6 @@
 package se.iths.javatwentytwo.labthree.labthree.controller;
 
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,7 +9,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
-import se.iths.javatwentytwo.labthree.labthree.model.ChatModel;
+import se.iths.javatwentytwo.labthree.labthree.model.ServerHandling;
+import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
 import java.io.File;
@@ -16,7 +18,7 @@ import java.io.File;
 public class ArtistController {
 
     public ArtistModel artistModel = new ArtistModel();
-    public ChatModel chatModel = new ChatModel();
+    public ServerHandling serverHandling = new ServerHandling();
 
     public GraphicsContext context;
     public Stage stage;
@@ -48,11 +50,11 @@ public class ArtistController {
     }
 
     public void initialize() {
-        context = canvas.getGraphicsContext2D();
         colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
-        sendButtonTextField.disableProperty().bind(chatModel.textMessageProperty().isEmpty());
-        messageChatList.setItems(chatModel.getObservableList());
+        textMessageField.textProperty().bindBidirectional(serverHandling.textMessageProperty());
+        messageChatList.setItems(serverHandling.getObservableList());
+        artistModel.getShapeListProperty().addListener(this::drawShape);
         setDisableProperty();
         setToggleButtonToShapeType();
     }
@@ -61,7 +63,7 @@ public class ArtistController {
         saveButton.disableProperty().bind(Bindings.isEmpty(artistModel.getShapeListProperty()));
         undoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getUndoListProperty()));
         redoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getRedoListProperty()));
-        textMessageField.textProperty().bindBidirectional(chatModel.textMessageProperty());
+        sendButtonTextField.disableProperty().bind(serverHandling.textMessageProperty().isEmpty());
     }
 
     private void setToggleButtonToShapeType() {
@@ -73,31 +75,34 @@ public class ArtistController {
     public void canvasClicked(MouseEvent mouseEvent) {
         artistModel.setPoint(mouseEvent.getX(), mouseEvent.getY());
         buttonSelected();
-        drawShape(context);
+        if(serverHandling.connectedProperty().get() && buttonToggleGroup.selectedToggleProperty().getValue().isSelected())
+            serverHandling.sendShape(artistModel.getShapeListProperty().get(artistModel.getShapeListProperty().size() - 1));
     }
 
-    private void drawShape(GraphicsContext context) {
+    private void drawShape(Observable observable) {
+        var context = canvas.getGraphicsContext2D();
         context.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (var shape : artistModel.getShapeListProperty()) {
+        for (Shape shape : artistModel.getShapeListProperty()) {
             shape.draw(context);
         }
     }
 
     public void buttonSelected() {
-        if (!selectButton.isSelected())
-            artistModel.createShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
-        else
-            artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
+        try {
+            if (!selectButton.isSelected())
+                artistModel.createShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
+            else
+                artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
+        }catch (NullPointerException ignored){
+        }
     }
 
     public void undoButtonClicked() {
         artistModel.undoLastCommand();
-        drawShape(context);
     }
 
     public void redoButtonClicked() {
         artistModel.redoLastCommand();
-        drawShape(context);
     }
 
     public void saveButtonClicked() {
@@ -113,17 +118,18 @@ public class ArtistController {
     }
 
     public void sendMessageClicked() {
-        chatModel.sendMessage();
+        serverHandling.sendMessage();
     }
 
     public void connectToServer() {
-        chatModel.connectServer();
-        chatModel.chatHandling();
+        serverHandling.connectedProperty().setValue(true);
+        serverHandling.connectServer();
         messageConnected.textProperty().setValue(connectServer.getText());
     }
 
     public void disconnectToServer() {
-        chatModel.disconnectServer();
+        serverHandling.connectedProperty().setValue(false);
+        serverHandling.disconnectServer();
         messageConnected.textProperty().setValue(disconnectServer.getText());
     }
 }
