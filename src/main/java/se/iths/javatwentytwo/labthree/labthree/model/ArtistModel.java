@@ -19,8 +19,7 @@ import java.util.regex.Pattern;
 
 public class ArtistModel {
 
-    private Point point;
-
+    ObjectProperty<Point> point = new SimpleObjectProperty<>();
     ObservableList<CommandHandling> undoList = FXCollections.observableArrayList();
     ObservableList<CommandHandling> redoList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
@@ -52,19 +51,21 @@ public class ArtistModel {
     }
 
     public void setPoint(double mousePointX, double mousePointY) {
-        this.point = new Point(mousePointX, mousePointY);
+        this.point.set(new Point(mousePointX, mousePointY));
     }
 
     public void createShapeToList(ShapeType shapeType) {
-        Shape shape = Shape.createShape(shapeType, point, colorPicker.getValue(), sizeSpinner.getValue());
+        Shape shape = Shape.createShape(shapeType, point.get(), colorPicker.getValue(), sizeSpinner.getValue());
         shapeList.add(shape);
         undoRedoShapeCreateCommand(shape);
     }
 
     public void addSvgToShapeList(String line){
+        System.out.println(shapeList);
         Shape shape = fromSvgToShape(line);
         shapeList.add(shape);
         undoRedoShapeCreateCommand(shape);
+        System.out.println(shapeList);
     }
 
     public Shape fromSvgToShape(String line) {
@@ -90,7 +91,7 @@ public class ArtistModel {
 
     public Shape selectShape() {
         return shapeList.stream()
-                .filter(shape -> shape.pointInsideShape(point))
+                .filter(shape -> shape.pointInsideShape(point.get()))
                 .findFirst().orElseThrow();
     }
 
@@ -151,5 +152,11 @@ public class ArtistModel {
         svgList.add("<svg width=\"820.0\" height=\"541.0\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
         shapeList.forEach(shape -> svgList.add(shape.svgFormat()));
         svgList.add("</svg>");
+    }
+
+    public void clearLists(){
+        shapeList.clear();
+        undoList.clear();
+        redoList.clear();
     }
 }

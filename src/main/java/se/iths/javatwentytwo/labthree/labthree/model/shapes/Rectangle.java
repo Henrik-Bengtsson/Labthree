@@ -14,20 +14,13 @@ public class Rectangle extends Shape{
 
     @Override
     public String svgFormat() {
-        return "<rect x=\"" + getPoint().getPosX() + "\" y=\"" + getPoint().getPosY() + "\" width=\"" + getSize() +
+        return "<rect x=\"" + getPoint().posXProperty().get() + "\" y=\"" + getPoint().posYProperty().get() + "\" width=\"" + getSize() +
                 "\" height=\"" + getSize() + "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
     }
 
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillRect(centerPoint().getPosX(), centerPoint().getPosY(), getSize(), getSize());
-    }
-
-    @Override
-    public boolean pointInsideShape(Point point) {
-        boolean xInside = point.getPosX() >= centerPoint().getPosX() && point.getPosX() <= centerPoint().getPosX() + getSize();
-        boolean yInside = point.getPosY() >= centerPoint().getPosY() && point.getPosY() <= centerPoint().getPosY() + getSize();
-        return xInside && yInside;
+        context.fillRect(centerPoint().posXProperty().get(), centerPoint().posYProperty().get(), getSize(), getSize());
     }
 }

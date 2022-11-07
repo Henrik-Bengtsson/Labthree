@@ -16,10 +16,10 @@ public class ServerHandling {
     ArtistModel artistModel = new ArtistModel();
     StringProperty textMessage = new SimpleStringProperty();
     ObservableList<String> observableList = FXCollections.observableArrayList();
+    BooleanProperty connected = new SimpleBooleanProperty(false);
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader read;
-    BooleanProperty connected = new SimpleBooleanProperty(false);
 
     public void connectServer() {
         Thread thread = new Thread(() -> {

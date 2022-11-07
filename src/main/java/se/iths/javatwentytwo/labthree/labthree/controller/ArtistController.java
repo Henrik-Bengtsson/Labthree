@@ -97,24 +97,28 @@ public class ArtistController {
         }
     }
 
-    public void undoButtonClicked() {
+    public void undo() {
         artistModel.undoLastCommand();
     }
 
-    public void redoButtonClicked() {
+    public void redo() {
         artistModel.redoLastCommand();
     }
 
-    public void saveButtonClicked() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save location");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
-
+    public void saveFile() {
+        FileChooser fileChooser = getFileChooser();
+        fileChooser.setTitle("Save file");
         File savePath = fileChooser.showSaveDialog(stage);
         if (savePath != null)
             artistModel.saveToFile(savePath.toPath());
+    }
+
+    private static FileChooser getFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
+        return fileChooser;
     }
 
     public void sendMessageClicked() {
@@ -131,5 +135,16 @@ public class ArtistController {
         serverHandling.connectedProperty().setValue(false);
         serverHandling.disconnectServer();
         messageConnected.textProperty().setValue(disconnectServer.getText());
+    }
+
+    public void startNewPaint() {
+        artistModel.clearLists();
+    }
+
+    public void closeProgram() {
+        System.exit(0);
+    }
+
+    public void openFile() {
     }
 }

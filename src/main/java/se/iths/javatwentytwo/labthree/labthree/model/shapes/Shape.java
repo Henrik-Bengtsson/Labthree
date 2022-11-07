@@ -1,17 +1,15 @@
 package se.iths.javatwentytwo.labthree.labthree.model.shapes;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
 import se.iths.javatwentytwo.labthree.labthree.model.Point;
 
 import java.util.Objects;
 
 public abstract class Shape {
-    static ArtistModel artistModel = new ArtistModel();
-
 
     private final SimpleObjectProperty<Point> point = new SimpleObjectProperty<>();
     private final SimpleObjectProperty<Color> color = new SimpleObjectProperty<>();
@@ -27,11 +25,15 @@ public abstract class Shape {
 
     public abstract void draw(GraphicsContext context);
 
-    public abstract boolean pointInsideShape(Point point);
+    public boolean pointInsideShape(Point point){
+        boolean xInside = point.posXProperty().get() >= centerPoint().posXProperty().get() && point.posXProperty().get() <= centerPoint().posXProperty().get() + getSize();
+        boolean yInside = point.posYProperty().get() >= centerPoint().posYProperty().get() && point.posYProperty().get() <= centerPoint().posYProperty().get() + getSize();
+        return xInside && yInside;
+    }
 
     public abstract String svgFormat();
 
-    public SimpleObjectProperty<Point> pointProperty() {
+    public ObjectProperty<Point> pointProperty() {
         return point;
     }
 
@@ -43,7 +45,7 @@ public abstract class Shape {
         this.point.set(point);
     }
 
-    public SimpleObjectProperty<Color> colorProperty() {
+    public ObjectProperty<Color> colorProperty() {
         return color;
     }
 
@@ -68,18 +70,17 @@ public abstract class Shape {
     }
 
     public Point centerPoint(){
-        var centerX = getPoint().getPosX() - getSize() / 2;
-        var centerY = getPoint().getPosY() - getSize() / 2;
+        var centerX = getPoint().posXProperty().get() - getSize() / 2;
+        var centerY = getPoint().posYProperty().get() - getSize() / 2;
         return new Point(centerX, centerY);
     }
-
 
     public static Shape rectFromSvg(String[] svgString) {
         double x = Double.parseDouble(svgString[1].substring(1,5));
         double y = Double.parseDouble(svgString[2].substring(1,5));
         double size = Double.parseDouble(svgString[3].substring(1,5));
         Color color = Color.valueOf(svgString[5].substring(1, 8));
-        return createShape(ShapeType.RECT, new Point(x, y), color, size);
+        return createShape(ShapeType.RECT, new Point(x,y), color, size);
     }
 
     public static Shape circleFromSvg(String[] svgString) {
@@ -98,17 +99,16 @@ public abstract class Shape {
         return createShape(ShapeType.TRIANGLE, new Point(x, y), color, size);
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shape shape)) return false;
-        return Objects.equals(point, shape.point) && Objects.equals(color, shape.color) && Objects.equals(size, shape.size);
+        return Objects.equals(color, shape.color) && Objects.equals(size, shape.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(point, color, size);
+        return Objects.hash(color, size);
     }
 
     @Override

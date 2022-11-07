@@ -14,21 +14,13 @@ public class Circle extends Shape{
 
     @Override
     public String svgFormat() {
-        return "<circle cx=\"" + getPoint().getPosX() + "\" cy=\"" + getPoint().getPosY() + "\" r=\"" + (getSize()/2) +
+        return "<circle cx=\"" + getPoint().posXProperty().get() + "\" cy=\"" + getPoint().posYProperty().get() + "\" r=\"" + (getSize()/2) +
                 "\" fill=\"#" + getColor().toString().substring(2) + "\" />";
-
     }
 
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillOval(centerPoint().getPosX(), centerPoint().getPosY(), getSize(), getSize());
-    }
-
-    @Override
-    public boolean pointInsideShape(Point point) {
-        boolean xInside = point.getPosX() >= centerPoint().getPosX() && point.getPosX() <= centerPoint().getPosX() + getSize();
-        boolean yInside = point.getPosY() >= centerPoint().getPosY() && point.getPosY() <= centerPoint().getPosY() + getSize();
-        return xInside && yInside;
+        context.fillOval(centerPoint().posXProperty().get(), centerPoint().posYProperty().get(), getSize(), getSize());
     }
 }

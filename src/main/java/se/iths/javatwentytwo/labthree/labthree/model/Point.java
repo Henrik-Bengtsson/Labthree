@@ -1,38 +1,32 @@
 package se.iths.javatwentytwo.labthree.labthree.model;
 
+import javafx.beans.property.SimpleDoubleProperty;
+
 import java.util.Objects;
 
 public class Point {
 
-    private double posX;
-    private double posY;
+    private final SimpleDoubleProperty posX = new SimpleDoubleProperty();
+    private final SimpleDoubleProperty posY = new SimpleDoubleProperty();
 
     public Point(double posX, double posY) {
-        this.posX = posX;
-        this.posY = posY;
+        this.posX.set(posX);
+        this.posY.set(posY);
     }
 
-    public double getPosX() {
+    public SimpleDoubleProperty posXProperty() {
         return posX;
     }
 
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public double getPosY() {
+    public SimpleDoubleProperty posYProperty() {
         return posY;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Point point)) return false;
-        return Double.compare(point.posX, posX) == 0 && Double.compare(point.posY, posY) == 0;
+        return Objects.equals(posX, point.posX) && Objects.equals(posY, point.posY);
     }
 
     @Override
