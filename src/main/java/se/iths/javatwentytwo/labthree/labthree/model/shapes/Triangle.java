@@ -23,7 +23,7 @@ public class Triangle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillPolygon(new double[]{centerPoint().posXProperty().get() + getSize()/2f, centerPoint().posXProperty().get(), centerPoint().posXProperty().get() + getSize()},
-                new double[]{centerPoint().posYProperty().get(), centerPoint().posYProperty().get() + getSize(), centerPoint().posYProperty().get() + getSize()}, 3);
+        context.fillPolygon(new double[]{getPoint().posXProperty().get() + getSize()/2f, getPoint().posXProperty().get(), getPoint().posXProperty().get() + getSize()},
+                new double[]{getPoint().posYProperty().get(), getPoint().posYProperty().get() + getSize(), getPoint().posYProperty().get() + getSize()}, 3);
     }
 }

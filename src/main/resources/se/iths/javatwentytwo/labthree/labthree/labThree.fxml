@@ -26,11 +26,6 @@
                            <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                        </accelerator>
                    </MenuItem>
-                   <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open">
-                       <accelerator>
-                           <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                       </accelerator>
-                   </MenuItem>
                    <MenuItem mnemonicParsing="false" onAction="#closeProgram" text="Close" />
                </Menu>
                <Menu mnemonicParsing="false" text="Edit">

@@ -25,13 +25,13 @@ public abstract class Shape {
 
     public abstract void draw(GraphicsContext context);
 
+    public abstract String svgFormat();
+
     public boolean pointInsideShape(Point point){
         boolean xInside = point.posXProperty().get() >= centerPoint().posXProperty().get() && point.posXProperty().get() <= centerPoint().posXProperty().get() + getSize();
         boolean yInside = point.posYProperty().get() >= centerPoint().posYProperty().get() && point.posYProperty().get() <= centerPoint().posYProperty().get() + getSize();
         return xInside && yInside;
     }
-
-    public abstract String svgFormat();
 
     public ObjectProperty<Point> pointProperty() {
         return point;

@@ -12,20 +12,20 @@ import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import java.io.*;
 import java.net.Socket;
 
-public class ServerHandling {
-    ArtistModel artistModel = new ArtistModel();
+public class ServerHandling{
+
     StringProperty textMessage = new SimpleStringProperty();
-    ObservableList<String> observableList = FXCollections.observableArrayList();
+    ObservableList<String> observableChatList = FXCollections.observableArrayList();
     BooleanProperty connected = new SimpleBooleanProperty(false);
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader read;
 
-    public void connectServer() {
+    public void connectServer(ArtistModel artistModel) {
         Thread thread = new Thread(() -> {
             try {
                 setupServer();
-                readMessageServer();
+                readMessageServer(artistModel);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -42,18 +42,18 @@ public class ServerHandling {
         read = new BufferedReader(new InputStreamReader(input));
     }
 
-    private void readMessageServer() throws IOException {
+    private void readMessageServer(ArtistModel artistModel) throws IOException {
         while(connected.get()) {
             String line = read.readLine();
-            Platform.runLater(() -> separateInput(line));
+            Platform.runLater(() -> separateInput(line, artistModel));
         }
     }
 
-    private void separateInput(String line){
+    private void separateInput(String line, ArtistModel artistModel){
         if(line.contains("<rect") || line.contains("<circle") || line.contains("<polyline"))
             artistModel.addSvgToShapeList(line);
         else
-            observableList.add(line);
+            observableChatList.add(line);
     }
 
     public void disconnectServer() {
@@ -76,8 +76,8 @@ public class ServerHandling {
         this.textMessage.set(textMessage);
     }
 
-    public ObservableList<String> getObservableList() {
-        return observableList;
+    public ObservableList<String> getObservableChatList() {
+        return observableChatList;
     }
 
     public void sendMessage() {

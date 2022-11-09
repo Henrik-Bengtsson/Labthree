@@ -17,17 +17,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ArtistModel {
+public class ArtistModel{
+
+    ServerHandling serverHandling = new ServerHandling();
 
     ObjectProperty<Point> point = new SimpleObjectProperty<>();
     ObservableList<CommandHandling> undoList = FXCollections.observableArrayList();
     ObservableList<CommandHandling> redoList = FXCollections.observableArrayList();
     ObjectProperty<Color> colorPicker = new SimpleObjectProperty<>(Color.RED);
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
-    ObservableList<Shape> shapeList = FXCollections.observableArrayList(ArtistModel::observableArray);
+    ObservableList<Shape> shapeList;
+
+    public ArtistModel(){
+        this.shapeList = FXCollections.observableArrayList(ArtistModel::observableArray);
+    }
 
     private static Observable[] observableArray(Shape shape){
         return new Observable[]{shape.colorProperty(), shape.sizeProperty(), shape.pointProperty()};
+    }
+
+    public ServerHandling getServerHandling() {
+        return serverHandling;
     }
 
     public ObservableList<CommandHandling> getUndoListProperty() {
@@ -61,11 +71,9 @@ public class ArtistModel {
     }
 
     public void addSvgToShapeList(String line){
-        System.out.println(shapeList);
         Shape shape = fromSvgToShape(line);
         shapeList.add(shape);
         undoRedoShapeCreateCommand(shape);
-        System.out.println(shapeList);
     }
 
     public Shape fromSvgToShape(String line) {

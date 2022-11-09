@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import se.iths.javatwentytwo.labthree.labthree.model.ArtistModel;
-import se.iths.javatwentytwo.labthree.labthree.model.ServerHandling;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
@@ -18,7 +17,6 @@ import java.io.File;
 public class ArtistController {
 
     public ArtistModel artistModel = new ArtistModel();
-    public ServerHandling serverHandling = new ServerHandling();
 
     public GraphicsContext context;
     public Stage stage;
@@ -52,8 +50,8 @@ public class ArtistController {
     public void initialize() {
         colorPicker.valueProperty().bindBidirectional(artistModel.colorPickerProperty());
         sizeSpinner.getValueFactory().valueProperty().bindBidirectional(artistModel.sizeSpinnerProperty());
-        textMessageField.textProperty().bindBidirectional(serverHandling.textMessageProperty());
-        messageChatList.setItems(serverHandling.getObservableList());
+        textMessageField.textProperty().bindBidirectional(artistModel.getServerHandling().textMessageProperty());
+        messageChatList.setItems(artistModel.getServerHandling().getObservableChatList());
         artistModel.getShapeListProperty().addListener(this::drawShape);
         setDisableProperty();
         setToggleButtonToShapeType();
@@ -63,7 +61,7 @@ public class ArtistController {
         saveButton.disableProperty().bind(Bindings.isEmpty(artistModel.getShapeListProperty()));
         undoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getUndoListProperty()));
         redoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getRedoListProperty()));
-        sendButtonTextField.disableProperty().bind(serverHandling.textMessageProperty().isEmpty());
+        sendButtonTextField.disableProperty().bind(artistModel.getServerHandling().textMessageProperty().isEmpty());
     }
 
     private void setToggleButtonToShapeType() {
@@ -75,12 +73,12 @@ public class ArtistController {
     public void canvasClicked(MouseEvent mouseEvent) {
         artistModel.setPoint(mouseEvent.getX(), mouseEvent.getY());
         buttonSelected();
-        if(serverHandling.connectedProperty().get() && buttonToggleGroup.selectedToggleProperty().getValue().isSelected())
-            serverHandling.sendShape(artistModel.getShapeListProperty().get(artistModel.getShapeListProperty().size() - 1));
+        if(artistModel.getServerHandling().connectedProperty().get() && !artistModel.getShapeListProperty().isEmpty())
+            artistModel.getServerHandling().sendShape(artistModel.getShapeListProperty().get(artistModel.getShapeListProperty().size() - 1));
     }
 
     private void drawShape(Observable observable) {
-        var context = canvas.getGraphicsContext2D();
+        context = canvas.getGraphicsContext2D();
         context.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (Shape shape : artistModel.getShapeListProperty()) {
             shape.draw(context);
@@ -105,35 +103,19 @@ public class ArtistController {
         artistModel.redoLastCommand();
     }
 
-    public void saveFile() {
-        FileChooser fileChooser = getFileChooser();
-        fileChooser.setTitle("Save file");
-        File savePath = fileChooser.showSaveDialog(stage);
-        if (savePath != null)
-            artistModel.saveToFile(savePath.toPath());
-    }
-
-    private static FileChooser getFileChooser() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        fileChooser.getExtensionFilters().clear();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
-        return fileChooser;
-    }
-
     public void sendMessageClicked() {
-        serverHandling.sendMessage();
+        artistModel.getServerHandling().sendMessage();
     }
 
     public void connectToServer() {
-        serverHandling.connectedProperty().setValue(true);
-        serverHandling.connectServer();
+        artistModel.getServerHandling().connectedProperty().setValue(true);
+        artistModel.getServerHandling().connectServer(artistModel);
         messageConnected.textProperty().setValue(connectServer.getText());
     }
 
     public void disconnectToServer() {
-        serverHandling.connectedProperty().setValue(false);
-        serverHandling.disconnectServer();
+        artistModel.getServerHandling().connectedProperty().setValue(false);
+        artistModel.getServerHandling().disconnectServer();
         messageConnected.textProperty().setValue(disconnectServer.getText());
     }
 
@@ -145,6 +127,19 @@ public class ArtistController {
         System.exit(0);
     }
 
-    public void openFile() {
+    private static FileChooser getFileChooser() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("SVG", "*.svg"));
+        return fileChooser;
+    }
+
+    public void saveFile() {
+        FileChooser fileChooser = getFileChooser();
+        fileChooser.setTitle("Save file");
+        File savePath = fileChooser.showSaveDialog(stage);
+        if (savePath != null)
+            artistModel.saveToFile(savePath.toPath());
     }
 }

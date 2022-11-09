@@ -21,6 +21,6 @@ public class Rectangle extends Shape{
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(getColor());
-        context.fillRect(centerPoint().posXProperty().get(), centerPoint().posYProperty().get(), getSize(), getSize());
+        context.fillRect(getPoint().posXProperty().get(), getPoint().posYProperty().get(), getSize(), getSize());
     }
 }
