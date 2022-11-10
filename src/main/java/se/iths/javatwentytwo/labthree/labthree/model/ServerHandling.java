@@ -12,22 +12,21 @@ import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import java.io.*;
 import java.net.Socket;
 
-public class ServerHandling{
+public class ServerHandling {
 
     StringProperty textMessage = new SimpleStringProperty();
     ObservableList<String> observableChatList = FXCollections.observableArrayList();
     BooleanProperty connected = new SimpleBooleanProperty(false);
-    private Socket socket;
-    private PrintWriter writer;
-    private BufferedReader read;
+    private Socket socket = null;
+    private PrintWriter writer = null;
+    private BufferedReader read = null;
 
     public void connectServer(ArtistModel artistModel) {
         Thread thread = new Thread(() -> {
             try {
                 setupServer();
                 readMessageServer(artistModel);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ignored) {
             }
         });
         thread.setDaemon(true);
@@ -43,14 +42,14 @@ public class ServerHandling{
     }
 
     private void readMessageServer(ArtistModel artistModel) throws IOException {
-        while(connected.get()) {
+        while (connected.get()) {
             String line = read.readLine();
             Platform.runLater(() -> separateInput(line, artistModel));
         }
     }
 
-    private void separateInput(String line, ArtistModel artistModel){
-        if(line.contains("<rect") || line.contains("<circle") || line.contains("<polyline"))
+    private void separateInput(String line, ArtistModel artistModel) {
+        if (line.contains("<rect") || line.contains("<circle") || line.contains("<polyline"))
             artistModel.addSvgToShapeList(line);
         else
             observableChatList.add(line);
@@ -59,6 +58,8 @@ public class ServerHandling{
     public void disconnectServer() {
         try {
             socket.close();
+            read.close();
+            writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -85,7 +86,7 @@ public class ServerHandling{
         setTextMessage("");
     }
 
-    public void sendShape(Shape shape){
+    public void sendShape(Shape shape) {
         writer.println(shape.svgFormat());
     }
 

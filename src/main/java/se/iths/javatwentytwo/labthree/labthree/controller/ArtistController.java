@@ -62,6 +62,7 @@ public class ArtistController {
         undoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getUndoListProperty()));
         redoButton.disableProperty().bind(Bindings.isEmpty(artistModel.getRedoListProperty()));
         sendButtonTextField.disableProperty().bind(artistModel.getServerHandling().textMessageProperty().isEmpty());
+        triangleButton.disableProperty().bind(Bindings.and(artistModel.getServerHandling().connectedProperty(), artistModel.getServerHandling().connectedProperty()));
     }
 
     private void setToggleButtonToShapeType() {
@@ -73,7 +74,7 @@ public class ArtistController {
     public void canvasClicked(MouseEvent mouseEvent) {
         artistModel.setPoint(mouseEvent.getX(), mouseEvent.getY());
         buttonSelected();
-        if(artistModel.getServerHandling().connectedProperty().get() && !artistModel.getShapeListProperty().isEmpty())
+        if (artistModel.getServerHandling().connectedProperty().get() && !artistModel.getShapeListProperty().isEmpty())
             artistModel.getServerHandling().sendShape(artistModel.getShapeListProperty().get(artistModel.getShapeListProperty().size() - 1));
     }
 
@@ -91,7 +92,7 @@ public class ArtistController {
                 artistModel.createShapeToList((ShapeType) buttonToggleGroup.getSelectedToggle().getUserData());
             else
                 artistModel.changeShape(colorPicker.getValue(), sizeSpinner.getValue());
-        }catch (NullPointerException ignored){
+        } catch (NullPointerException ignored) {
         }
     }
 
@@ -115,8 +116,8 @@ public class ArtistController {
 
     public void disconnectToServer() {
         artistModel.getServerHandling().connectedProperty().setValue(false);
-        artistModel.getServerHandling().disconnectServer();
         messageConnected.textProperty().setValue(disconnectServer.getText());
+        artistModel.getServerHandling().disconnectServer();
     }
 
     public void startNewPaint() {

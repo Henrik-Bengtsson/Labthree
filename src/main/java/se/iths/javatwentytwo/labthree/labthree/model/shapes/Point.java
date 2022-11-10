@@ -1,4 +1,4 @@
-package se.iths.javatwentytwo.labthree.labthree.model;
+package se.iths.javatwentytwo.labthree.labthree.model.shapes;
 
 import javafx.beans.property.SimpleDoubleProperty;
 

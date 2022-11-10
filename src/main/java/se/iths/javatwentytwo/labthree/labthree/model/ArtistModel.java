@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import se.iths.javatwentytwo.labthree.labthree.model.command.CommandHandling;
+import se.iths.javatwentytwo.labthree.labthree.model.shapes.Point;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.Shape;
 import se.iths.javatwentytwo.labthree.labthree.model.shapes.ShapeType;
 
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ArtistModel{
+public class ArtistModel {
 
     ServerHandling serverHandling = new ServerHandling();
 
@@ -28,11 +29,11 @@ public class ArtistModel{
     ObjectProperty<Integer> sizeSpinner = new SimpleObjectProperty<>(50);
     ObservableList<Shape> shapeList;
 
-    public ArtistModel(){
+    public ArtistModel() {
         this.shapeList = FXCollections.observableArrayList(ArtistModel::observableArray);
     }
 
-    private static Observable[] observableArray(Shape shape){
+    private static Observable[] observableArray(Shape shape) {
         return new Observable[]{shape.colorProperty(), shape.sizeProperty(), shape.pointProperty()};
     }
 
@@ -48,7 +49,7 @@ public class ArtistModel{
         return redoList;
     }
 
-    public ObservableList <Shape> getShapeListProperty() {
+    public ObservableList<Shape> getShapeListProperty() {
         return shapeList;
     }
 
@@ -70,7 +71,7 @@ public class ArtistModel{
         undoRedoShapeCreateCommand(shape);
     }
 
-    public void addSvgToShapeList(String line){
+    public void addSvgToShapeList(String line) {
         Shape shape = fromSvgToShape(line);
         shapeList.add(shape);
         undoRedoShapeCreateCommand(shape);
@@ -80,11 +81,11 @@ public class ArtistModel{
         Pattern pattern = Pattern.compile("[=,]");
         String[] svgString = pattern.split(line);
 
-        if(line.contains("rect"))
+        if (line.contains("rect"))
             return Shape.rectFromSvg(svgString);
-        else if(line.contains("circle"))
+        else if (line.contains("circle"))
             return Shape.circleFromSvg(svgString);
-        else if(line.contains("polyline"))
+        else if (line.contains("polyline"))
             return Shape.triangleFromSvg(svgString);
         return null;
     }
@@ -162,7 +163,7 @@ public class ArtistModel{
         svgList.add("</svg>");
     }
 
-    public void clearLists(){
+    public void clearLists() {
         shapeList.clear();
         undoList.clear();
         redoList.clear();
