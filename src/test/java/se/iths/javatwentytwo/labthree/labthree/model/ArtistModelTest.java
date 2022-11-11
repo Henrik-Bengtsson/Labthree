@@ -27,10 +27,10 @@ class ArtistModelTest {
 
         artistModel.createShapeToList(ShapeType.CIRCLE);
         artistModel.createShapeToList(ShapeType.RECT);
-        artistModel.shapeList.remove(artistModel.shapeList.size() - 1);
+        artistModel.undoLastCommand();
         artistModel.redoLastCommand();
 
-        var expected = 1;
+        var expected = 2;
         var actual = artistModel.shapeList.size();
 
         assertEquals(expected, actual);
