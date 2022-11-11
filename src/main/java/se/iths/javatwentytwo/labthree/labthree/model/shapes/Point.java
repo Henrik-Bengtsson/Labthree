@@ -1,24 +1,22 @@
 package se.iths.javatwentytwo.labthree.labthree.model.shapes;
 
-import javafx.beans.property.SimpleDoubleProperty;
-
 import java.util.Objects;
 
 public class Point {
 
-    private final SimpleDoubleProperty posX = new SimpleDoubleProperty();
-    private final SimpleDoubleProperty posY = new SimpleDoubleProperty();
+    private final double posX;
+    private final double posY;
 
     public Point(double posX, double posY) {
-        this.posX.set(posX);
-        this.posY.set(posY);
+        this.posX = posX;
+        this.posY = posY;
     }
 
-    public SimpleDoubleProperty posXProperty() {
+    public double getPosX() {
         return posX;
     }
 
-    public SimpleDoubleProperty posYProperty() {
+    public double getPosY() {
         return posY;
     }
 
@@ -26,7 +24,7 @@ public class Point {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Point point)) return false;
-        return Objects.equals(posX, point.posX) && Objects.equals(posY, point.posY);
+        return Double.compare(point.posX, posX) == 0 && Double.compare(point.posY, posY) == 0;
     }
 
     @Override

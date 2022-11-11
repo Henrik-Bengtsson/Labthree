@@ -26,11 +26,7 @@ public abstract class Shape {
 
     public abstract String svgFormat();
 
-    public boolean pointInsideShape(Point point) {
-        boolean xInside = point.posXProperty().get() >= centerPoint().posXProperty().get() && point.posXProperty().get() <= centerPoint().posXProperty().get() + getSize();
-        boolean yInside = point.posYProperty().get() >= centerPoint().posYProperty().get() && point.posYProperty().get() <= centerPoint().posYProperty().get() + getSize();
-        return xInside && yInside;
-    }
+    public abstract boolean pointInsideShape(Point point);
 
     public ObjectProperty<Point> pointProperty() {
         return point;
@@ -69,8 +65,8 @@ public abstract class Shape {
     }
 
     public Point centerPoint() {
-        var centerX = getPoint().posXProperty().get() - getSize() / 2;
-        var centerY = getPoint().posYProperty().get() - getSize() / 2;
+        var centerX = getPoint().getPosX() - getSize() / 2;
+        var centerY = getPoint().getPosY() - getSize() / 2;
         return new Point(centerX, centerY);
     }
 
